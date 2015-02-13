@@ -65,14 +65,13 @@ def recording():
 if __name__ == 'main':
     # Program execution starts here
 
-    #input box to ask ID
-    #input box to ask which avatar participant selected, addConfederate
-    #input box to ask which world, addWorld
-    #initialize slider
-
     initVR()
     viz.go()
     initModels()
-    initKeypresses()
+    initKeyBindings()
 
+    # TODO: input box to ask ID
+    # TODO: input box to ask which avatar participant selected, addConfederate
+    # TODO: input box to ask which world, addWorld
+    # TODO: initialize slider
 
