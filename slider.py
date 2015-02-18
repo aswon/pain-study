@@ -44,6 +44,6 @@ class Slider(object):
         d = math.sqrt(sum(i * i for i in v))
 
         # Interpolate the value between min_v and max_v
-        s = d / width
+        s = d / self.width
         return self.min_v + s * (self.max_v - self.min_v)
 
