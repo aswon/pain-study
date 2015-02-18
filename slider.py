@@ -11,7 +11,6 @@ class Slider(object):
     value will also increase.
 
     Usage:
-
     # Create a slider half a meter long, with output from [0, 10]
     slider = Slider(0, 10, 0.5, marker_1, marker_2)
 
@@ -28,6 +27,8 @@ class Slider(object):
             width: The width of the slider, in meters.
             marker_1, marker_2: Marker Node3D objects.
         """
+        self.min_v = min_v
+        self.max_v = max_v
         self.width = width
         self.marker_1 = marker_1
         self.marker_2 = marker_2
@@ -44,5 +45,5 @@ class Slider(object):
 
         # Interpolate the value between min_v and max_v
         s = d / width
-        return min_v + s * (max_v - min_v)
+        return self.min_v + s * (self.max_v - self.min_v)
 
