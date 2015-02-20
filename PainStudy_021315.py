@@ -1,77 +1,68 @@
-﻿import oculus
+import oculus
 import viz
+import vizinput
+import random
+import datetime
+
+# key presses
+# r - reset
+# d - data
+# i - hand in
+# o - hand out
+
+MODEL_ARRAY = ['Models/dojo.osgb', 'Models/PPT2.osgb'] #TODO Andrea change scale PPT2 and door texture
+
+dateTime = datetime.datetime.now()
+participantID = str(dateTime)
+participantID = participantID.replace(":", "-").replace(' ','_').split(".")[0]
+print participantID
 
 def initVR():
     """Initializes tracking and Oculus Rift"""
     hmd = oculus.Rift()
-    viz.link(hmd.getSensor(), viz.MainView) #also we'll need to add tracking once PPT2 is up and running
+    hmd_sensor = hmd.getSensor()
+    hmd_sensor.reset()
+    PPT_HOSTNAME = '171.64.32.54'
+    vrpn = viz.add('vrpn7.dle')
+    headTracker = vrpn.addTracker('PPT0@' + PPT_HOSTNAME, 0)
+    headPPT = viz.mergeLinkable(headTracker,hmd_sensor)
+    hmd_link = viz.link(headPPT, viz.MainView)
+    vizact.onkeydown('r', hmd.getSensor().reset)
 
 def initModels():
     """Loads all of the models in the room"""
+    randomSeed = random.randint(0,len(MODEL_ARRAY)-1)
+    worldModel = MODEL_ARRAY[randomSeed]
+    cube = viz.addChild(worldModel)
+    cube.setPosition(0,0,0)
+    
+# ---- handInData ----
+def handInData():
+    print 'hand in'
+    #write "hand in" and timestamp in second recording file
 
-    # TODO: put pain scale on table (and build in real world) Andrea
-    table = viz.addChild('table.osgb')
-    table.setPosition(0,0.25,0)
-    table.setEuler(0,0,0)
-
-    # also chairs (two) Andrea
-    chair = viz.addChild('chair.osgb')
-    chair.setPosition(0,.375,0)
-    chair.setEuler(0,0,0)
-
-    # TODO: make version of lab room- Andrea
-    cube = viz.addChild('PPT2.osgb')
-    cube.setPosition(0,0.5,0)
-
-    # TODO: make version of other lab room- Andrea
-    cube = viz.addChild('PPTOhio.osgb')
-    cube.setPosition(0,0.5,0)
+# ---- handOutData ----
+def handOutData():
+	print 'hand out'
+	#write "hand out" and timestamp to second recording file
 
 def initKeyBindings():
     """Key bindings for program"""
     #vizact.onkeydown('n',avatarNod)
-    vizact.onkeydown('a',avatarAlive)
-    vizact.onkeydown('n',avatarNod)
     vizact.onkeydown('i',#insert "Hand in" in data)
     vizact.onkeydown('o',#insert "Hand out" in data)
-    vizact.onkeydown('r',Recording)
-
-def addConfederate(one that is selected in text box): #Pavitra and Alyssa
-    """ <Place function description here> """
-    # TODO: apply idling/seated animations to avatars
-    # TODO: avatar look to participant and mimic head movements (4 second lag)
-    # vizact.onkeydown('a',avatarAlive)
-    # vizact.onkeydown('n',avatarNod)
-    pass
-
-def avatarComesAlive():
-    """ <Place function description here> """
-    print('Avatar Alive')
-    # TODO: insert "Alive" in recorded data- to be coordinated with Mariano later
-    # TODO: avatar idles body animation
-
-def avatarNod():
-    """ <Place function description here> """
-    print('Avatar Nod')
-    # TODO: insert "Nod" in recorded data- to be coordinated with Mariano later
-    # TODO: avatar nods
+    vizact.onkeydown('d',Recording)
 
 def recording():
     """ <Place function description here> """
     print('Recording')
-    # TODO: record head XYZ, head pitch yaw roll, and all print commands
-    # TODO: also record audio to be synchronized
+    # TODO: record head XYZ and head pitch yaw roll to file "ParticipantID_Movement.dat"
+    # TODO: record keypresses to file "ParticipantID_Events.dat"
 
-if __name__ == 'main':
-    # Program execution starts here
+initVR()
+viz.go()
+initModels()
+initKeyBindings()
 
-    initVR()
-    viz.go()
-    initModels()
-    initKeyBindings()
-
-    # TODO: input box to ask ID
-    # TODO: input box to ask which avatar participant selected, addConfederate
-    # TODO: input box to ask which world, addWorld
-    # TODO: initialize slider
+# TODO: initialize slider (we may not be using the slider in this quarter's study)
 
